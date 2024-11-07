@@ -1,4 +1,4 @@
-class Resourse {
+class Resource {
     constructor() {
         this.toLoad = {
             sky: "/sprites/sky.png",
@@ -23,4 +23,4 @@ class Resourse {
     }
 }
 
-export const resourses = new Resourse();
+export const resources = new Resource();
