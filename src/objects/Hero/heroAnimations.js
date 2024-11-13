@@ -35,12 +35,12 @@ const makeWalkingFrames = (rootFrame = 0) => {
 }
 
 export const STAND_DOWN = makeStandingFrames(1);
-export const STAND_RIGTH = makeStandingFrames(4);
+export const STAND_RIGHT = makeStandingFrames(4);
 export const STAND_UP = makeStandingFrames(7);
 export const STAND_LEFT = makeStandingFrames(10);
 
 export const WALK_DOWN = makeWalkingFrames(0);
-export const WALK_RIGTH = makeWalkingFrames(3);
+export const WALK_RIGHT = makeWalkingFrames(3);
 export const WALK_UP = makeWalkingFrames(6);
 export const WALK_LEFT = makeWalkingFrames(9);
 
