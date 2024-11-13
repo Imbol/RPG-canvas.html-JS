@@ -8,8 +8,9 @@ import { FrameIndexPattern } from "../../FrameIndexPattern";
 import { moveTowards } from "../../helpers/MoveTowards.js";
 import { walls } from "../../levels/level1.js"
 import { isSpaceFree } from "../../helpers/Grid";
+import { events } from "../../Events.js";
 import {
-    PICK_UP_DOWN,
+    // PICK_UP_DOWN,
     STAND_DOWN,
     STAND_LEFT,
     STAND_RIGHT,
@@ -44,8 +45,7 @@ export class Hero extends GameObject {
               walkDown: new FrameIndexPattern(WALK_DOWN),
               walkUp: new FrameIndexPattern(WALK_UP),
               walkLeft: new FrameIndexPattern(WALK_LEFT),
-              walkRight: new FrameIndexPattern(WALK_RIGHT),
-          
+              walkRight: new FrameIndexPattern(WALK_RIGHT),          
               standDown: new FrameIndexPattern(STAND_DOWN),
               standUp: new FrameIndexPattern(STAND_UP),
               standLeft: new FrameIndexPattern(STAND_LEFT),
@@ -64,7 +64,18 @@ export class Hero extends GameObject {
 
         if (hasArrived) {
             this.tryMove(root)
-        }        
+        }
+
+        this.tryEmitPosition()
+      }
+
+    tryEmitPosition() {
+      if (this.lastX === this.position.x && this.lastY === this.position.y) {
+        return;
+      }
+      this.lastX = this.position.x;
+      this.lastY = this.position.y;
+      events.emit("HERO_POSITION", this.position)
     }
 
     tryMove = (root) => {
@@ -72,12 +83,12 @@ export class Hero extends GameObject {
 
         if (!input.direction) {
       
-          if (this.facingDirection === LEFT) {this.body.animations.play('standLeft')}
-          if (this.facingDirection === RIGHT) {this.body.animations.play('standRight')}
-          if (this.facingDirection === UP) {this.body.animations.play('standUp')}
-          if (this.facingDirection === DOWN) {this.body.animations.play('standDown')}
+            if (this.facingDirection === LEFT) { this.body.animations.play("standLeft")}
+            if (this.facingDirection === RIGHT) { this.body.animations.play("standRight")}
+            if (this.facingDirection === UP) { this.body.animations.play("standUp")}
+            if (this.facingDirection === DOWN) { this.body.animations.play("standDown")}
       
-          return;
+            return;
         }
       
         let nextX = this.destinationPosition.x;

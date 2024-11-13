@@ -7,6 +7,7 @@ import { Input } from './src/Input';
 import { gridCells } from './src/helpers/Grid';
 import { GameObject } from './src/GameObject';
 import { Hero } from './src/objects/Hero/Hero';
+import { events } from './src/Events';
 
 //Agarrando el canvas para dibujar
 const canvas = document.querySelector('#game-canvas');
@@ -36,6 +37,10 @@ mainScene.addChild(hero);
 // const heroPos = new Vector2(16 * 6, 16 * 5);
 //Agregar una clase de entrada a la escena principal
 mainScene.input = new Input();
+
+events.on("HERO_POSITION", mainScene, heroPosition => {
+  console.log("HERO MOVED", heroPosition)
+})
 
 //Establecer bucles de actualización y dibujo
 const update = (delta) => {
