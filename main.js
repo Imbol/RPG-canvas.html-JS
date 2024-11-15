@@ -1,30 +1,30 @@
 import './style.css'
-import { resources } from './src/Resource';
-import { Sprite } from './src/Sprite';
-import { Vector2 } from './src/Vector2';
-import { GameLoop } from './src/GameLoop';
-import { Input } from './src/Input';
-import { gridCells } from './src/helpers/Grid';
-import { GameObject } from './src/GameObject';
-import { Hero } from './src/objects/Hero/Hero';
-import { events } from './src/Events';
-import { Camera } from './src/Camera';
+import {resources} from "./src/Resource.js";
+import {Sprite} from "./src/Sprite.js";
+import {Vector2} from "./src/Vector2.js";
+import {GameLoop} from "./src/GameLoop.js";
+import {Input} from "./src/Input.js";
+import {gridCells} from "./src/helpers/grid.js";
+import {GameObject} from "./src/GameObject.js";
+import {Hero} from "./src/objects/Hero/Hero.js";
+import {Camera} from "./src/Camera.js";
+import {Rod} from "./src/objects/Rod/Rod.js";
+import {Inventory} from "./src/objects/Inventory/Inventory.js";
 
-//Agarrando el canvas para dibujar
-const canvas = document.querySelector('#game-canvas');
-const ctx = canvas.getContext('2d');
+// Grabbing the canvas to draw to
+const canvas = document.querySelector("#game-canvas");
+const ctx = canvas.getContext("2d");
 
-//Establecer la escena raíz
+// Establish the root scene
 const mainScene = new GameObject({
-  position: new Vector2(0, 0)
+  position: new Vector2(0,0)
 })
 
-//Construye la escena agregando un cielo, un suelo y un héroe.
+// Build up the scene by adding a sky, ground, and hero
 const skySprite = new Sprite({
   resource: resources.images.sky,
   frameSize: new Vector2(320, 180)
 })
-mainScene.addChild(skySprite);
 
 const groundSprite = new Sprite({
   resource: resources.images.ground,
@@ -38,38 +38,45 @@ mainScene.addChild(hero);
 const camera = new Camera()
 mainScene.addChild(camera);
 
-// const heroPos = new Vector2(16 * 6, 16 * 5);
-//Agregar una clase de entrada a la escena principal
+const rod = new Rod(gridCells(7), gridCells(6))
+mainScene.addChild(rod);
+
+const inventory = new Inventory();
+
+
+// Add an Input class to the main scene
 mainScene.input = new Input();
 
-//Establecer bucles de actualización y dibujo
+
+// Establish update and draw loops
 const update = (delta) => {
   mainScene.stepEntry(delta, mainScene)
-}
-
+};
 const draw = () => {
 
-  // Limpia todo lo que esté obsoleto
+  // Clear anything stale
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Guardar el estado actual (para el desplazamiento de la cámara)
+  // Draw the sky
+  skySprite.drawImage(ctx, 0, 0)
+
+  // Save the current state (for camera offset)
   ctx.save();
 
-  //Desplazamiento por posición de la cámara
+  //Offset by camera position
   ctx.translate(camera.position.x, camera.position.y);
 
-  //Dibujar objetos en la escena montada
+  // Draw objects in the mounted scene
   mainScene.draw(ctx, 0, 0);
 
-  // Restaurar al estado original
+  // Restore to original state
   ctx.restore();
+
+  // Draw anything above the game world
+  inventory.draw(ctx, 0, 0)
+
 }
 
-//Iniciar el juego
+// Start the game!
 const gameLoop = new GameLoop(update, draw);
 gameLoop.start();
-
-// setInterval(() => { 
-//   hero.frame += 1; 
-//   draw()
-// }, 300)
